@@ -19,7 +19,8 @@ def scrape_all():
         "news_paragraph": news_paragraph,
         "featured_image": featured_image(browser),
         "facts": mars_facts(),
-        "last_modified": dt.datetime.now()
+        "last_modified": dt.datetime.now(),
+        "hemispheres": hemispheres(browser)
     }
     
     # end the automated browsing session.
@@ -101,6 +102,67 @@ def mars_facts():
     # convert pandas dataframe back into html
     return df.to_html()
 
+# Scrape hemisphere data
+def hemispheres(browser):
+    #visit the url
+    url = 'https://marshemispheres.com/'
+    browser.visit(url)
+    
+    # create a list to hold the images and titles.
+    hemisphere_image_urls = []
+    hemispheres={}
+
+    # parse the html
+    html=browser.html
+    mars_page=soup(html, "html.parser")
+
+    # for each <div class="description" /> found:   
+    for desc in mars_page.find_all("div", class_="description"):
+
+        #GET IMAGE URL
+
+        #on the main page, find the link to go to the description page, which hold the link for jpg.
+
+        # extract the relative description url extension, then attach to base url
+        desc_url_rel=desc.find("a").get("href")
+        desc_url=f"{url}{desc_url_rel}"
+
+        #visit the description url
+        browser.visit(desc_url)
+
+        #parse the new page
+        html=browser.html
+        desc_page=soup(html, "html.parser")
+
+        # on the description page, find the link to the jpg image
+
+        # extract relative image url extension, then attach to base url
+        image_url_rel=desc_page.find("li").find("a").get("href")
+        image_url=f"{url}{image_url_rel}"
+
+        # GET THE TITLE
+        #extract the title
+        title=desc_page.find("h2", class_="title").text
+
+        # go back to the main page (mars_page)
+        browser.back()
+
+        #save the image url into the hemispheres dict
+        hemispheres["img_url"]=image_url
+        hemispheres["title"]=title
+
+        #put the dict into the hemisphere_image_urls list
+        hemisphere_image_urls.append(hemispheres.copy())
+        
+    #close/quit the browser
+    #browser.quit()
+
+    #return the hemisphere_image_urls
+    return hemisphere_image_urls
+    
+    
+    
 if __name__ == "__main__":
     #if running as script, print scraped data
     print(scrape_all())
+    
