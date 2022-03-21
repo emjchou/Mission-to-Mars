@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +12,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
-    <div class = "container">
+    <div class = "container-fluid">
         <div class = "jumbotron text-center">
             <h1>Mission to Mars</h1>
             <!--button for scraping data-->
@@ -40,21 +41,23 @@
                 <img src="{{mars.featured_image}}" class = "img-responsive" alt="Responsive image">
             </div>
             <!-- Mars Facts -->
-            <div class = "col-md-4">
-                <div class = "row" id="mars-facts">
-                    <h4>Mars Facts</h4>
-                    {{mars.facts | safe}}
+            <div class = "col-md-4 center">
+                <div class = "container-fluid text-center"></div>
+                    <div class = "row text-center container-fluid" id="mars-facts">
+                        <h4 class = "text-center">Mars Facts</h4>
+                        <p class="text-center">{{mars.facts | safe}}</p>
+                    </div>
                 </div>
             </div>
         </div>
         <!-- mars hemisphere image urls -->
         <div class = "row" id = "mars-hemisphere-image-urls">
-            <h2>Mars Hemisphere Image URLs</h2>
+            <h3 class="text-center fluid-container">Mars Hemisphere Image URLs</h3>
             {% for hemisphere in mars.hemispheres %}
-            <div class="col-md-6">
+            <div class="col-xs-3 col-md-6">
                 <figure>
-                    <figcaption><h3>{{hemisphere.title}}</h3></figcaption>
                     <img src="{{hemisphere.img_url}}" class="img-responsive" alt="Responsive image">
+                    <figcaption><p class="text-center">{{hemisphere.title}}</p></figcaption>
                 </figure>
             </div>
             {% endfor %}
